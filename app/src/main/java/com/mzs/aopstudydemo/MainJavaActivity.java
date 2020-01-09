@@ -18,6 +18,7 @@ public class MainJavaActivity extends AppCompatActivity {
     String TAG = "MainActivity";
     Button button1;
     Button button2;
+    Button button3;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -25,6 +26,7 @@ public class MainJavaActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         button1 = findViewById(R.id.button1);
         button2 = findViewById(R.id.button2);
+        button3 = findViewById(R.id.button3);
 
         button1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -44,56 +46,45 @@ public class MainJavaActivity extends AppCompatActivity {
                 }).start();
             }
         });
-        stepOn1();
-        stepOn2("小明");
-        stepOn3("小明", 18);
-    }
-
-    private void stepOn1() {
-        System.out.println("stepOn1");
-    }
-    private void stepOn2(String name) {
-        System.out.println("stepOn1");
-    }
-    private void stepOn3(String name ,int i) {
-        System.out.println("stepOn1");
+        button3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                stepOn1();
+                stepOn2("小明");
+                stepOn3("小明", 18);
+            }
+        });
     }
 
     public void test() {
         System.out.println("Hello,I am LIN");
     }
-    public void threadTest(){
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                System.out.println("休眠1秒");
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(MainJavaActivity.this,"主线程弹出Toast",Toast.LENGTH_SHORT).show();
-                    }
-                });
+
+    private void stepOn1() {
+        System.out.println("stepOn1");
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
+    private void stepOn2(String name) {
+        System.out.println("stepOn1");
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
+    private void stepOn3(String name, int i) {
+        System.out.println("stepOn1");
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
+    public void threadTest() {
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println("休眠1秒");
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(MainJavaActivity.this, "主线程弹出Toast", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
 }
