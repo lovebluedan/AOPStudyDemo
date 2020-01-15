@@ -1,10 +1,14 @@
 package com.mzs.aopstudydemo;
 
 import android.graphics.Point;
+import android.nfc.Tag;
 import android.os.SystemClock;
+import android.util.Log;
+import android.widget.Toast;
 
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.AfterThrowing;
@@ -12,6 +16,12 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.reflect.MethodSignature;
+
+import java.lang.reflect.Method;
+import java.util.function.LongToDoubleFunction;
+
+import kotlin.jvm.Throws;
 
 /**
  * Create by ldr
@@ -19,6 +29,7 @@ import org.aspectj.lang.annotation.Pointcut;
  */
 @Aspect
 public class TestAnnoAspectJava {
+    private static final String TAG = "TestAnnoAspectJava";
 
     @Pointcut("execution(* com.mzs.aopstudydemo.MainJavaActivity.test())")
     public void pointcut() {
@@ -81,7 +92,7 @@ public class TestAnnoAspectJava {
         System.out.println("point.getSourceLocation()" + point.getSourceLocation());
         System.out.println("point.getStaticPart()" + point.getStaticPart());
         System.out.println("point.getTarget()" + point.getTarget());
-        System.out.println("point.getThis()" + point.getThis().getClass().getSimpleName());
+        System.out.println("point.getThis()" + point.getThis());
         System.out.println("point.toShortString()" + point.toShortString());
         System.out.println("point.toLongString()" + point.toLongString());
         System.out.println("point.toString()" + point.toString());
@@ -95,6 +106,35 @@ public class TestAnnoAspectJava {
         }
     }
 
+    //--------------------------------------------------------------------------------------------------
+
+    public static Boolean isLoagin = false;
 
 
+    @Pointcut("execution(@com.mzs.aopstudydemo.CheckLogin * *(..))")
+    public void checkLogin() {
+    }
+
+    @Around("checkLogin()")
+    public void checkLoginPoint(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
+        //1. 获取函数的签名信息，获取方法信息
+        MethodSignature signature = (MethodSignature) proceedingJoinPoint.getSignature();
+        Method method = signature.getMethod();
+        //2. 检查是否存在我们定义的CheckLogin注解
+        CheckLogin annotation = method.getAnnotation(CheckLogin.class);
+        boolean isSkip = annotation.isSkip();//判断是要跳过检查
+        if (annotation != null) {
+            if (isSkip) {
+                Log.i(TAG, "isSkip=true 这里不需要检查登录状态~~~~~~");
+                proceedingJoinPoint.proceed();
+            } else {
+                if (isLoagin) {
+                    Log.i(TAG, "您已经登录过了~~~~");
+                    proceedingJoinPoint.proceed();
+                } else {
+                    Log.i(TAG, "请先登录~~~~~");
+                }
+            }
+        }
+    }
 }

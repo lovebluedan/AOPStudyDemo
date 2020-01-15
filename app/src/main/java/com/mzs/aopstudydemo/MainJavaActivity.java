@@ -2,6 +2,7 @@ package com.mzs.aopstudydemo;
 
 import android.os.Bundle;
 import android.os.PersistableBundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -19,6 +20,9 @@ public class MainJavaActivity extends AppCompatActivity {
     Button button1;
     Button button2;
     Button button3;
+    Button button4;
+    Button button5;
+    Button button6;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -27,6 +31,9 @@ public class MainJavaActivity extends AppCompatActivity {
         button1 = findViewById(R.id.button1);
         button2 = findViewById(R.id.button2);
         button3 = findViewById(R.id.button3);
+        button4 = findViewById(R.id.button4);
+        button5 = findViewById(R.id.button5);
+        button6 = findViewById(R.id.button6);
 
         button1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,6 +61,24 @@ public class MainJavaActivity extends AppCompatActivity {
                 stepOn3("小明", 18);
             }
         });
+        button4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TestAnnoAspectJava.isLoagin = !TestAnnoAspectJava.isLoagin;
+            }
+        });
+        button5.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LoginAfter();
+            }
+        });
+        button6.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                unCheckLogin();
+            }
+        });
     }
 
     public void test() {
@@ -65,11 +90,11 @@ public class MainJavaActivity extends AppCompatActivity {
     }
 
     private void stepOn2(String name) {
-        System.out.println("stepOn1");
+        System.out.println("stepOn2");
     }
 
     private void stepOn3(String name, int i) {
-        System.out.println("stepOn1");
+        System.out.println("stepOn3");
     }
 
     public void threadTest() {
@@ -86,5 +111,18 @@ public class MainJavaActivity extends AppCompatActivity {
             }
         });
     }
+
+    @CheckLogin()
+    public void LoginAfter(){
+        Log.i(TAG,"这里是登录成功后才会显示的数据——浪里个浪~~~");
+    }
+
+    @CheckLogin(isSkip = true)
+    public void unCheckLogin(){
+        Log.i(TAG,"这里是不需求要登录判断的~~~~");
+    }
+
+
+
 
 }
